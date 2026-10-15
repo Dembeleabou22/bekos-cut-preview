@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Debug — Booking Test</title>
+  <style>
+    body{font-family:Inter,system-ui; padding:20px; background:#0f1720; color:#e6e6e6}
+    .panel{background:#111827;padding:16px;border-radius:8px;margin-bottom:12px}
+    button{padding:8px 12px;border-radius:8px;background:#B89A4F;border:none;color:#081018;font-weight:700}
+  </style>
+</head>
+<body>
+  <h1>Debug: Booking Flow Simulation</h1>
+
+  <div class="panel">
+    <h2>Simulate Consent</h2>
+    <label><input id="consent" type="checkbox"> Consent checked</label>
+  </div>
+
+  <div class="panel">
+    <h2>Simulate Calendly loaded / blocked</h2>
+    <button id="open-ok">Open Booking (Calendly available)</button>
+    <button id="open-blocked">Open Booking (Calendly blocked)</button>
+  </div>
+
+  <div class="panel">
+    <h2>Result</h2>
+    <pre id="result">-</pre>
+  </div>
+
+  <script>
+    const result = document.getElementById('result');
+    const consent = document.getElementById('consent');
+    document.getElementById('open-ok').addEventListener('click', () => {
+      if (!consent.checked) return result.textContent = 'Consent required';
+      result.textContent = 'Would call Calendly.showPopupWidget(...)';
+    });
+    document.getElementById('open-blocked').addEventListener('click', () => {
+      if (!consent.checked) return result.textContent = 'Consent required';
+      result.textContent = 'Calendly blocked — opening direct link as fallback';
+    });
+  </script>
+</body>
+</html>

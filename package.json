@@ -1,0 +1,13 @@
+{
+  "name": "bekos-cut-preview",
+  "version": "1.0.0",
+  "description": "Berkos Cut preview site — tests and CI",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
