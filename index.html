@@ -15,8 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <!-- Calendly widget CSS (einmalig) -->
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"/>
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
   </head>
   <body>
     <header class="site-header">
@@ -219,13 +218,27 @@
                 <span>Berlin, Innenstadt</span>
               </div>
             </div>
+
+            <label class="consent-row" for="calendly-consent">
+              <input id="calendly-consent" type="checkbox" />
+              <span>
+                Ich stimme zu, dass Calendly meine Kontaktdaten verarbeitet, um einen Termin zu buchen.
+              </span>
+            </label>
           </div>
 
           <div>
-            <!-- Calendly Popup Button -->
-            <button id="calendly-btn" class="btn btn-primary">Jetzt Termin</button>
+            <div class="booking-actions">
+              <button id="calendly-btn" type="button" class="btn btn-primary">Jetzt Termin</button>
+              <button id="calendly-inline-toggle" type="button" class="btn btn-secondary">
+                Inline-Booking anzeigen
+              </button>
+            </div>
 
-            <!-- Existing booking form (kept for fallback) -->
+            <div id="calendly-inline-wrapper" class="calendly-inline-wrapper" hidden>
+              <div id="calendly-inline" style="min-height: 700px;"></div>
+            </div>
+
             <form class="booking-form" id="bookingForm">
               <label>
                 Name
@@ -290,39 +303,89 @@
       </div>
     </footer>
 
-    <!-- Calendly widget script (einmalig) -->
     <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
-    <!-- Prefill + popup handler (uses bookingForm values if present) -->
     <script>
       (function () {
         const CAL_LINK = 'https://calendly.com/dembeleabou2004';
+        const consent = document.getElementById('calendly-consent');
         const btn = document.getElementById('calendly-btn');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            const form = document.getElementById('bookingForm');
-            let url = CAL_LINK;
-            if (form) {
-              const fd = new FormData(form);
-              const name = fd.get('name') ? fd.get('name').toString().trim() : '';
-              const email = fd.get('email') ? fd.get('email').toString().trim() : '';
-              const service = fd.get('service') ? fd.get('service').toString().trim() : '';
-              const params = new URLSearchParams();
-              if (name) params.set('name', name);
-              if (email) params.set('email', email);
-              if (service) params.set('a1', service);
-              if ([...params].length) url += '?' + params.toString();
+        const inlineToggle = document.getElementById('calendly-inline-toggle');
+        const inlineWrapper = document.getElementById('calendly-inline-wrapper');
+        const inlineContainer = document.getElementById('calendly-inline');
+
+        const getPrefillUrl = () => {
+          const form = document.getElementById('bookingForm');
+          if (!form) return CAL_LINK;
+
+          const fd = new FormData(form);
+          const name = fd.get('name') ? fd.get('name').toString().trim() : '';
+          const email = fd.get('email') ? fd.get('email').toString().trim() : '';
+          const service = fd.get('service') ? fd.get('service').toString().trim() : '';
+
+          const params = new URLSearchParams();
+          if (name) params.set('name', name);
+          if (email) params.set('email', email);
+          if (service) params.set('a1', service);
+
+          const url = new URL(CAL_LINK);
+          if ([...params].length) {
+            for (const [key, value] of params.entries()) {
+              url.searchParams.set(key, value);
             }
-            Calendly.showPopupWidget(url);
-          });
+          }
+          return url.toString();
+        };
+
+        const ensureConsent = () => {
+          if (!consent || consent.checked) return true;
+          consent.focus();
+          alert('Bitte akzeptiere die Datenschutzerklärung, damit Calendly deinen Termin buchen kann.');
+          return false;
+        };
+
+        const openPopup = () => {
+          if (!ensureConsent()) return;
+          if (window.Calendly) {
+            Calendly.showPopupWidget(getPrefillUrl());
+          } else {
+            window.open(getPrefillUrl(), '_blank');
+          }
+        };
+
+        const renderInlineWidget = () => {
+          if (!ensureConsent()) return;
+          if (!inlineWrapper || !inlineContainer) return;
+
+          inlineWrapper.hidden = false;
+
+          if (window.Calendly && !inlineContainer.dataset.rendered) {
+            Calendly.initInlineWidget({
+              url: getPrefillUrl(),
+              parentElement: inlineContainer,
+              prefill: {},
+              utm: {}
+            });
+            inlineContainer.dataset.rendered = 'true';
+          }
+        };
+
+        if (btn) {
+          btn.addEventListener('click', openPopup);
         }
 
-        window.addEventListener('message', function(e) {
+        if (inlineToggle) {
+          inlineToggle.addEventListener('click', renderInlineWidget);
+        }
+
+        window.addEventListener('message', function (e) {
           try {
             const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
             if (data?.event === 'calendly.event_scheduled') {
               const successEl = document.getElementById('formSuccess');
-              if (successEl) successEl.textContent = 'Termin erfolgreich angefragt — Bestätigung kommt per E-Mail.';
+              if (successEl) {
+                successEl.textContent = 'Termin erfolgreich angefragt — Bestätigung kommt per E-Mail.';
+              }
             }
           } catch (err) {
             // ignore non-json messages
