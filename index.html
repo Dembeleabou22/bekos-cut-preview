@@ -4,16 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Berkos Cut | Frisör & Terminbuchung</title>
-    <meta
-      name="description"
-      content="Berkos Cut – moderne Frisörwebsite mit Terminbuchung, Dienstleistungen und Portfolio."
-    />
+    <meta name="description" content="Berkos Cut – moderne Frisörwebsite mit Terminbuchung, Dienstleistungen und Portfolio." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
   </head>
@@ -63,10 +57,7 @@
               <span>45 min</span>
             </div>
             <div class="image-frame">
-              <img
-                src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80"
-                alt="Friseur arbeitet an einem Kunden"
-              />
+              <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=900&q=80" alt="Friseur arbeitet an einem Kunden" />
             </div>
             <div class="card floating-card card-bottom">
               <div class="rating">
@@ -145,24 +136,15 @@
 
           <div class="portfolio-grid">
             <figure class="portfolio-item large">
-              <img
-                src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=900&q=80"
-                alt="Männlicher Haarschnitt"
-              />
+              <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=900&q=80" alt="Männlicher Haarschnitt" />
               <figcaption>Classic Fade</figcaption>
             </figure>
             <figure class="portfolio-item">
-              <img
-                src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=700&q=80"
-                alt="Barbershop Styling"
-              />
+              <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=700&q=80" alt="Barbershop Styling" />
               <figcaption>Textured Crop</figcaption>
             </figure>
             <figure class="portfolio-item">
-              <img
-                src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=700&q=80"
-                alt="Bartpflege"
-              />
+              <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=700&q=80" alt="Bartpflege" />
               <figcaption>Beard Contour</figcaption>
             </figure>
           </div>
@@ -172,10 +154,7 @@
       <section id="about" class="section about-section">
         <div class="container about-grid">
           <div class="about-image">
-            <img
-              src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1200&q=80"
-              alt="Friseur im Salon"
-            />
+            <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1200&q=80" alt="Friseur im Salon" />
           </div>
           <div class="about-copy">
             <p class="eyebrow">Über uns</p>
@@ -204,8 +183,7 @@
             <p class="eyebrow">Termin buchen</p>
             <h2>Jetzt deinen Termin reservieren</h2>
             <p>
-              Wähle einen gewünschten Service, einen Termin und wir melden uns mit der
-              Bestätigung zurück.
+              Wähle deinen Service und buche direkt über Calendly. Nach der Zustimmung wird das Widget angezeigt.
             </p>
 
             <div class="booking-meta">
@@ -221,22 +199,18 @@
 
             <label class="consent-row" for="calendly-consent">
               <input id="calendly-consent" type="checkbox" />
-              <span>
-                Ich stimme zu, dass Calendly meine Kontaktdaten verarbeitet, um einen Termin zu buchen.
-              </span>
+              <span>Ich stimme zu, dass Calendly meine Kontaktdaten verarbeitet, um einen Termin zu buchen.</span>
             </label>
           </div>
 
           <div>
             <div class="booking-actions">
-              <button id="calendly-btn" type="button" class="btn btn-primary">Jetzt Termin</button>
-              <button id="calendly-inline-toggle" type="button" class="btn btn-secondary">
-                Inline-Booking anzeigen
-              </button>
+              <button id="calendly-btn" type="button" class="btn btn-primary" disabled>Jetzt Termin</button>
+              <button id="calendly-inline-toggle" type="button" class="btn btn-secondary" disabled>Inline-Booking anzeigen</button>
             </div>
 
             <div id="calendly-inline-wrapper" class="calendly-inline-wrapper" hidden>
-              <div id="calendly-inline" style="min-height: 700px;"></div>
+              <div id="calendly-inline" style="min-height:700px;"></div>
             </div>
 
             <form class="booking-form" id="bookingForm">
@@ -307,88 +281,128 @@
 
     <script>
       (function () {
-        const CAL_LINK = 'https://calendly.com/dembeleabou2004';
+        const CAL_LINK = 'https://calendly.com/dembeleabou2004/45min';
         const consent = document.getElementById('calendly-consent');
         const btn = document.getElementById('calendly-btn');
         const inlineToggle = document.getElementById('calendly-inline-toggle');
         const inlineWrapper = document.getElementById('calendly-inline-wrapper');
         const inlineContainer = document.getElementById('calendly-inline');
+        const formSuccess = document.getElementById('formSuccess');
 
-        const getPrefillUrl = () => {
+        function setButtonsState(enabled) {
+          if (btn) btn.disabled = !enabled;
+          if (inlineToggle) inlineToggle.disabled = !enabled;
+        }
+
+        function showStatus(message, isError) {
+          if (!formSuccess) return;
+          formSuccess.textContent = message;
+          formSuccess.style.color = isError ? '#ffb4b4' : '#a9f7c4';
+        }
+
+        function getPrefillUrl() {
           const form = document.getElementById('bookingForm');
-          if (!form) return CAL_LINK;
+          const url = new URL(CAL_LINK);
+          if (!form) return url.toString();
 
           const fd = new FormData(form);
-          const name = fd.get('name') ? fd.get('name').toString().trim() : '';
-          const email = fd.get('email') ? fd.get('email').toString().trim() : '';
-          const service = fd.get('service') ? fd.get('service').toString().trim() : '';
+          const name = fd.get('name')?.toString().trim();
+          const email = fd.get('email')?.toString().trim();
+          const service = fd.get('service')?.toString().trim();
 
-          const params = new URLSearchParams();
-          if (name) params.set('name', name);
-          if (email) params.set('email', email);
-          if (service) params.set('a1', service);
+          if (name) url.searchParams.set('name', name);
+          if (email) url.searchParams.set('email', email);
+          if (service) url.searchParams.set('a1', service);
 
-          const url = new URL(CAL_LINK);
-          if ([...params].length) {
-            for (const [key, value] of params.entries()) {
-              url.searchParams.set(key, value);
-            }
-          }
           return url.toString();
-        };
+        }
 
-        const ensureConsent = () => {
+        function ensureConsent() {
           if (!consent || consent.checked) return true;
+          showStatus('Bitte akzeptiere die Datenschutzhinweise, um den Termin zu buchen.', true);
           consent.focus();
-          alert('Bitte akzeptiere die Datenschutzerklärung, damit Calendly deinen Termin buchen kann.');
           return false;
-        };
+        }
 
-        const openPopup = () => {
-          if (!ensureConsent()) return;
-          if (window.Calendly) {
-            Calendly.showPopupWidget(getPrefillUrl());
-          } else {
-            window.open(getPrefillUrl(), '_blank');
-          }
-        };
+        function openBookingInSafeMode() {
+          const targetUrl = getPrefillUrl();
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        }
 
-        const renderInlineWidget = () => {
+        function renderInlineWidget() {
           if (!ensureConsent()) return;
           if (!inlineWrapper || !inlineContainer) return;
 
           inlineWrapper.hidden = false;
 
-          if (window.Calendly && !inlineContainer.dataset.rendered) {
-            Calendly.initInlineWidget({
-              url: getPrefillUrl(),
-              parentElement: inlineContainer,
-              prefill: {},
-              utm: {}
-            });
-            inlineContainer.dataset.rendered = 'true';
+          if (window.Calendly && inlineContainer && !inlineContainer.dataset.rendered) {
+            try {
+              Calendly.initInlineWidget({
+                url: getPrefillUrl(),
+                parentElement: inlineContainer,
+                prefill: {},
+                utm: {}
+              });
+              inlineContainer.dataset.rendered = 'true';
+            } catch (error) {
+              console.error('Calendly Inline Widget Error:', error);
+              openBookingInSafeMode();
+            }
           }
-        };
+        }
+
+        function openBooking() {
+          if (!ensureConsent()) return;
+
+          const targetUrl = getPrefillUrl();
+
+          if (window.Calendly && typeof Calendly.showPopupWidget === 'function') {
+            try {
+              Calendly.showPopupWidget(targetUrl);
+              return;
+            } catch (error) {
+              console.warn('Calendly popup failed, fallback to direct link:', error);
+            }
+          }
+
+          openBookingInSafeMode();
+        }
+
+        if (consent) {
+          consent.addEventListener('change', function () {
+            const enabled = consent.checked;
+            setButtonsState(enabled);
+            if (enabled) {
+              showStatus('Vielen Dank. Du kannst jetzt deine Buchung starten.', false);
+            } else {
+              showStatus('Bitte akzeptiere die Datenschutzhinweise, um den Termin zu buchen.', true);
+            }
+          });
+        }
 
         if (btn) {
-          btn.addEventListener('click', openPopup);
+          btn.addEventListener('click', openBooking);
         }
 
         if (inlineToggle) {
           inlineToggle.addEventListener('click', renderInlineWidget);
         }
 
-        window.addEventListener('message', function (e) {
+        setTimeout(() => {
+          if (consent && consent.checked) {
+            setButtonsState(true);
+            renderInlineWidget();
+          }
+        }, 500);
+
+        window.addEventListener('message', function (event) {
           try {
-            const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-            if (data?.event === 'calendly.event_scheduled') {
-              const successEl = document.getElementById('formSuccess');
-              if (successEl) {
-                successEl.textContent = 'Termin erfolgreich angefragt — Bestätigung kommt per E-Mail.';
-              }
+            const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+            if (data && data.event === 'calendly.event_scheduled') {
+              showStatus('Termin erfolgreich gebucht — Bestätigung kommt per E-Mail.', false);
             }
-          } catch (err) {
-            // ignore non-json messages
+          } catch (error) {
+            // Non-JSON messages are ignored.
           }
         });
       })();
